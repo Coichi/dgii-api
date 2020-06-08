@@ -18,7 +18,10 @@ function fetchRNC(rnc) {
             .wait("body")
             .type("#cphMain_txtRNCCedula", rnc)
             .click("#cphMain_btnBuscarPorRNC")
-            .wait("tbody")
+            .wait(() => {
+                const tbody = document.querySelector("tbody");
+                const lblIn = document.querySelector("#cphMain_lblInformacion");
+                return (!(tbody === null && lblIn.innerText === ""))})
             .evaluate(() => document.querySelector("body").innerHTML)
             .end()
             .then(response => {
@@ -39,7 +42,10 @@ function fetchNCF(rnc, ncf) {
             .type("#cphMain_txtRNC", rnc)
             .type("#cphMain_txtNCF", ncf)
             .click("#cphMain_btnConsultar")
-            .wait("tbody")
+            .wait(() => {
+                const tbody = document.querySelector("tbody");
+                const lblIn = document.querySelector("#cphMain_lblInformacion");
+                return (!(tbody === null && lblIn === null))})
             .evaluate(() => document.querySelector("body").innerHTML)
             .end()
             .then(response => {
@@ -71,7 +77,7 @@ app.get("/rnc", async function(req, res) {
     }
 
     if ($) {
-        value.encontrado = true;
+        value.encontrado = $("tbody").html() !== null;
         $("td", "tbody").each((i, elem) => {
             switch(i) {
                 case 1: value.cedulaRnc = $(elem).text();  break;
@@ -102,19 +108,7 @@ app.get("/ncf", async function(req, res) {
     }
 
     if ($) {
-        value.encontrado = true;
-        /*$("td", "tbody").each((i, elem) => {
-            console.log($(elem).text());
-            switch(i) {
-                case 0: value.cedulaRnc = $(elem).text();  break;
-                case 1: value.razonSocial = $(elem).text(); break;
-                case 2: value.tipoComprobante = $(elem).text(); break;
-                case 3: value.ncf = $(elem).text(); break;
-                case 4: value.estado = $(elem).text(); break;
-                case 5: value.validoHasta = $(elem).text(); break;
-            }
-        });*/
-
+        value.encontrado = $("tbody").html() !== null;
         value.cedulaRnc = $("#cphMain_lblRncCedula", "tbody").text();
         value.razonSocial = $("#cphMain_lblRazonSocial", "tbody").text();
         value.tipoComprobante = $("#cphMain_lblTipoComprobante", "tbody").text();
