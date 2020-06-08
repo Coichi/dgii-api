@@ -6,12 +6,12 @@ const Nightmare = require("nightmare");
 const app = express();
 app.use(bodyParser.urlencoded({extended:true}));
 
-const nightmare = Nightmare({ show: false });
 const port = process.env.PORT || 3000;
 const rncUrl = "https://dgii.gov.do/app/WebApps/ConsultasWeb2/ConsultasWeb/consultas/rnc.aspx";
 const ncfUrl = "https://dgii.gov.do/app/WebApps/ConsultasWeb2/ConsultasWeb/consultas/ncf.aspx";
 
 function fetchRNC(rnc) {
+    const nightmare = Nightmare({ show: false });
     const result = 
         nightmare
             .goto(rncUrl)
@@ -35,6 +35,7 @@ function fetchRNC(rnc) {
 }
 
 function fetchNCF(rnc, ncf) {
+    const nightmare = Nightmare({ show: false });
     const result = 
         nightmare
             .goto(ncfUrl)
